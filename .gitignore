@@ -1,0 +1,8 @@
+/.dart_tool/
+/.idea/
+/android/.gradle/
+/android/.idea/
+/android/local.properties
+/android/web_game_android.iml
+/build/
+/ios/
