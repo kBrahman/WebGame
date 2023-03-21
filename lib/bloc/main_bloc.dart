@@ -32,7 +32,7 @@ class MainBloc extends BaseBloc<UIState, UIState> {
       try {
         final instance = FirebaseRemoteConfig.instance
           ..setConfigSettings(RemoteConfigSettings(
-              fetchTimeout: const Duration(seconds: 30), minimumFetchInterval: const Duration(minutes: 2)));
+              fetchTimeout: const Duration(seconds: 30), minimumFetchInterval: const Duration(minutes: 1)));
         await instance.fetchAndActivate();
         url = instance.getString(URL);
         appLog(_TAG, 'url:$url, last fetch time:${instance.lastFetchTime}');

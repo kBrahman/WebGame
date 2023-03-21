@@ -1,13 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="game">
+    package="flaggames.app">
 
     <application
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="web_game">
+        android:icon="@mipmap/launcher_icon"
+        android:label="Betflag">
         <activity
-            android:name=".MainActivity"
+            android:name="flaggames.app.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"

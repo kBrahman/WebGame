@@ -16,7 +16,7 @@ class MainWidget extends StatelessWidget {
       builder: (ctx, snap) {
         final state = snap.data!;
         return Scaffold(
-            appBar: state == UIState.WEBVIEW
+            appBar: state == UIState.WEBVIEW || state == UIState.LOADING
                 ? null
                 : state == UIState.PLUG
                     ? AppBar(toolbarHeight: 0)
@@ -31,7 +31,7 @@ class MainWidget extends StatelessWidget {
       case UIState.ERR_CONNECTION:
         return const Center(child: Text('You need internet access to proceed'));
       case UIState.PLUG:
-        return const  FlappyBallPlug();
+        return const FlappyBallPlug();
       case UIState.WEBVIEW:
         return SafeArea(
             child: WillPopScope(
