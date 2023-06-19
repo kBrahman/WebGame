@@ -1,8 +1,8 @@
 name: web_game
-description: Simple game
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+description: Jumping ball
+publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.3+4
 
 environment:
   sdk: '>=2.19.4 <3.0.0'
@@ -10,22 +10,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^2.0.6
+  shared_preferences: ^2.1.2
   cupertino_icons: ^1.0.2
-  firebase_remote_config: ^3.0.14
-  device_info_plus: ^8.1.0
-  firebase_core: ^2.7.1
-  webview_flutter: ^4.0.6
+  cloud_firestore: ^4.8.1
+  firebase_core: ^2.14.0
+  http: ^1.0.0
+  google_sign_in: ^6.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.12.0"
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^2.0.1
 
-flutter_icons:
-  android: "launcher_icon"
+flutter_launcher_icons:
+  android: "ball"
   ios: true
-  image_path: "assets/launcher.png"
+  image_path: "assets/ball.png"
 
 flutter_lints: ^2.0.0
 
@@ -33,3 +34,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/ball.png
+    - assets/ball_ios.png

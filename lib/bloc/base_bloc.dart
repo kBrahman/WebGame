@@ -3,11 +3,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:web_game/util.dart';
+import 'package:flutter/services.dart';
+import 'package:web_game/util/util.dart';
 
 abstract class BaseBloc<D, C> {
   static const _TAG = 'BaseBloc';
-
   final ctr = StreamController<C>();
 
   late Stream<D> stream;

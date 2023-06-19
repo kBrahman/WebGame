@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web_game/bloc/main_bloc.dart';
-import 'package:web_game/widget/flappy_ball_plug.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:web_game/widget/game.dart';
 
 class MainWidget extends StatelessWidget {
   final MainBloc _bloc;
@@ -16,11 +14,7 @@ class MainWidget extends StatelessWidget {
       builder: (ctx, snap) {
         final state = snap.data!;
         return Scaffold(
-            appBar: state == UIState.WEBVIEW || state == UIState.LOADING
-                ? null
-                : state == UIState.PLUG
-                    ? AppBar(toolbarHeight: 0)
-                    : AppBar(title: const Text('WebGame')),
+            appBar: state == UIState.GAME ? AppBar(toolbarHeight: 0) : AppBar(title: const Text('Flappy Ball')),
             body: _getBody(state));
       });
 
@@ -28,18 +22,10 @@ class MainWidget extends StatelessWidget {
     switch (state) {
       case UIState.LOADING:
         return const Center(child: CircularProgressIndicator());
-      case UIState.ERR_CONNECTION:
-        return const Center(child: Text('You need internet access to proceed'));
-      case UIState.PLUG:
-        return const FlappyBallPlug();
-      case UIState.WEBVIEW:
-        return SafeArea(
-            child: WillPopScope(
-                onWillPop: () async {
-                  _bloc.webCtr.goBack();
-                  return false;
-                },
-                child: WebViewWidget(controller: _bloc.webCtr)));
+      // case UIState.ERR_CONNECTION:
+      //   return const Center(child: Text('You need internet access to proceed'));
+      case UIState.GAME:
+        return const Game();
       default:
         throw 'not implemented';
     }
