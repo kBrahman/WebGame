@@ -23,7 +23,7 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  static const _TAG = '_PlugState';
+  static const _TAG = '_GameState';
   final _v = 2.6;
   var _y = .0;
   var _t = .0;
@@ -140,6 +140,7 @@ class _GameState extends State<Game> {
       });
 
   void _start(delta) {
+    appLog(_TAG, 'start: barrx:$_barrieX, bx init:$_barrierXInitial');
     const deltaTime = 30;
     Timer.periodic(const Duration(milliseconds: deltaTime), (timer) {
       _t += deltaTime / 1000;
