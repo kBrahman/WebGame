@@ -75,8 +75,14 @@ class LeaderBloc extends BaseBloc<LeaderData, Event> {
               listenable.value = -1;
               break;
             }
-            await _register(sp.getInt(SCORE_BEST) ?? 0, name, id, flag ?? '', sp.getString(COUNTRY), sp);
-            yield data = await _getResult(data, name, id, flag);
+            try {
+              await _register(sp.getInt(SCORE_BEST) ?? 0, name, id, flag ?? '', sp.getString(COUNTRY), sp);
+              yield data = await _getResult(data, name, id, flag);
+            } catch (e) {
+              appLog(_TAG, 'exc err:$e');
+              yield data = data.copyWith(networkErr: false);
+              listenable.value = -1;
+            }
           }
       }
     }

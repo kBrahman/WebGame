@@ -120,11 +120,11 @@ class Leaderboard extends SimpleDialog {
               return const Center(child: CircularProgressIndicator());
             case UIState.SET_NAME:
               return ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 390),
+                  constraints: const BoxConstraints(maxWidth: 390),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     const SizedBox(height: 16),
                     const Text('LEADERBOARD', style: TextStyle(fontWeight: FontWeight.bold)),
-                    // const Text('1, 2 and 3 places can play without ads!!!', style: TextStyle(color: Colors.grey)),
+                    const Text('1, 2 and 3 places can play without ads!!!', style: TextStyle(color: Colors.grey)),
                     Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16),
                         child: ValueListenableBuilder(

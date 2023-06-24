@@ -7,6 +7,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_game/bloc/leader_bloc.dart';
 import 'package:web_game/widget/barrier.dart';
@@ -43,6 +44,8 @@ class _GameState extends State<Game> {
   double? _topBarrierHeight;
   int? _rank;
   final rnd = Random();
+  InterstitialAd? _ad;
+  DateTime? _nxtAdShowTime;
 
   @override
   void initState() {
@@ -51,6 +54,7 @@ class _GameState extends State<Game> {
       setState(() => _best = sp.getInt(SCORE_BEST) ?? 0);
       _getRank(sp);
     });
+
     super.initState();
   }
 
@@ -74,7 +78,6 @@ class _GameState extends State<Game> {
               _barrieX ??= _barrierXInitial;
               _bottomBarrierH ??= rnd.nextDouble() * (_maxH - _ballSpace);
               _topBarrierHeight ??= _maxH - _ballSpace - _bottomBarrierH!;
-              // appLog(_TAG, 'ball space:$_ballSpace, ball side:$_ballSide');
               return Stack(children: [
                 AnimatedContainer(
                     color: Colors.blue,
@@ -145,6 +148,7 @@ class _GameState extends State<Game> {
         _barrieX = _barrieX! - delta;
       });
       if (_y > 1 || _hit()) {
+        _showAd();
         timer.cancel();
         started = false;
         setState(() {
@@ -171,6 +175,7 @@ class _GameState extends State<Game> {
     });
     started = true;
     _updateTime();
+    _prepareAd();
   }
 
   void _generateHeights() {
@@ -233,4 +238,33 @@ class _GameState extends State<Game> {
   double _getBarrierWidth(double w) => 0.157728706624606 * w + 38.485804416403785;
 
   double _getBarrXInit(double w) => 1.984542586750789 - 0.000473186119874 * w;
+
+  void _prepareAd() {
+    if (_ad != null || _rank != null && _rank! < 4) return;
+    _nxtAdShowTime = DateTime.now().add(const Duration(seconds: 60));
+    InterstitialAd.load(
+        adUnitId: ID_INTERSTITIAL,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+          appLog(_TAG, 'ad loaded');
+          _ad = ad;
+        }, onAdFailedToLoad: (err) {
+          appLog(_TAG, 'ad failed to load:$err');
+          _prepareAd();
+        }));
+  }
+
+  void _showAd() {
+    appLog(_TAG, 'show ad');
+    if (_nxtAdShowTime?.isBefore(DateTime.now()) ?? true) {
+      _ad?.fullScreenContentCallback = FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _ad = null;
+        _prepareAd();
+      });
+      _ad?.setImmersiveMode(true);
+      _ad?.show();
+      appLog(_TAG, 'should show ad');
+    }
+  }
 }

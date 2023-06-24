@@ -8,6 +8,10 @@ const ID = 'id';
 const COUNTRY = 'country';
 const TIME = 'time';
 const TIME_LAST_CHECK = 'time_last_check';
+const ID_INTERSTITIAL = 'ca-app-pub-1303758337250441/3021692383';
+const ID_REWARDED_INT = 'ca-app-pub-1303758337250441/5673574753';
+const ID_APP = 'ca-app-pub-1303758337250441~3688477617';
+
 const COUNTRY_TO_FLAG = {
   'afghanistan': '🇦🇫',
   'åland islands': '🇦🇽',
