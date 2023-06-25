@@ -105,7 +105,7 @@ class Leaderboard extends SimpleDialog {
                                     context: ctx,
                                     builder: (ctx) => Dialog(
                                           insetPadding: EdgeInsets.zero,
-                                          child: Text(user.country,
+                                          child: Text(user.country.capitalizeFirstLetters()!,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(color: Theme.of(ctx).primaryColorDark, fontSize: 20)),
                                         )),

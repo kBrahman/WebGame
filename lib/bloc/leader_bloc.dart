@@ -26,9 +26,8 @@ class LeaderBloc extends BaseBloc<LeaderData, Event> {
 
   Stream<LeaderData> _getStream(String? id) async* {
     final sp = await SharedPreferences.getInstance();
-    // await sp.reload();
     var data = const LeaderData();
-    final flag = sp.getString(FLAG);
+    var flag = sp.getString(FLAG);
     appLog(_TAG, 'id:$id, flag:$flag');
     if (id == null)
       yield data = data.copyWith(state: UIState.SET_NAME, flag: flag);
@@ -50,8 +49,10 @@ class LeaderBloc extends BaseBloc<LeaderData, Event> {
           yield data = data.copyWith(updating: false);
           break;
         case Cmd.FLAG:
-          final flag = e.flag;
-          sp.setString(FLAG, flag!);
+          flag = e.flag;
+          sp
+            ..setString(FLAG, flag!)
+            ..setString(COUNTRY, COUNTRY_TO_FLAG.entries.firstWhere((e) => e.value == flag).key);
           yield data = data.copyWith(flag: flag);
           break;
         case Cmd.NEXT:

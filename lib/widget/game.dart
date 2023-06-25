@@ -5,6 +5,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -52,7 +53,7 @@ class _GameState extends State<Game> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SharedPreferences.getInstance().then((sp) {
       setState(() => _best = sp.getInt(SCORE_BEST) ?? 0);
-      _getRank(sp);
+      Firebase.initializeApp().whenComplete(() => _getRank(sp));
     });
 
     super.initState();
@@ -74,10 +75,8 @@ class _GameState extends State<Game> {
               _ballSide = _getBallSide(_maxW);
               _ballSpace = _getBallSpace(_maxW);
               _barrierWidth = _getBarrierWidth(_maxW);
-              _barrierXInitial = _getBarrXInit(_maxW);
-              _barrieX ??= _barrierXInitial;
-              _bottomBarrierH ??= rnd.nextDouble() * (_maxH - _ballSpace);
-              _topBarrierHeight ??= _maxH - _ballSpace - _bottomBarrierH!;
+              // appLog(_TAG, 'max w:$_maxW, max h:$_maxH, top h:$_topBarrierHeight, bottom h:$_bottomBarrierH');
+
               return Stack(children: [
                 AnimatedContainer(
                     color: Colors.blue,
@@ -86,12 +85,12 @@ class _GameState extends State<Game> {
                     child: Image.asset('assets/ball.png', height: _ballSide, width: _ballSide)),
                 AnimatedContainer(
                     duration: const Duration(milliseconds: 0),
-                    alignment: Alignment(_barrieX!, 1),
-                    child: Barrier(_bottomBarrierH!, _barrierWidth, Alignment.bottomCenter)),
+                    alignment: Alignment(_barrieX ?? 2, 1),
+                    child: Barrier(_bottomBarrierH ?? 0, _barrierWidth, Alignment.bottomCenter)),
                 AnimatedContainer(
                     duration: const Duration(milliseconds: 0),
-                    alignment: Alignment(_barrieX!, -1),
-                    child: Barrier(_topBarrierHeight!, _barrierWidth, Alignment.topCenter)),
+                    alignment: Alignment(_barrieX ?? 2, -1),
+                    child: Barrier(_topBarrierHeight ?? 0, _barrierWidth, Alignment.topCenter)),
                 if (gameOver)
                   Center(
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -140,8 +139,12 @@ class _GameState extends State<Game> {
       });
 
   void _start(delta) {
-    appLog(_TAG, 'start: barrx:$_barrieX, bx init:$_barrierXInitial');
     const deltaTime = 30;
+    _barrierXInitial = _getBarrXInit(_maxW);
+    _barrieX = _barrierXInitial;
+    _bottomBarrierH = rnd.nextDouble() * (_maxH - _ballSpace);
+    _topBarrierHeight = _maxH - _ballSpace - _bottomBarrierH!;
+    appLog(_TAG, 'start: barrx:$_barrieX, bx init:$_barrierXInitial, bar w:$_barrierWidth');
     Timer.periodic(const Duration(milliseconds: deltaTime), (timer) {
       _t += deltaTime / 1000;
       setState(() {
@@ -242,7 +245,7 @@ class _GameState extends State<Game> {
 
   void _prepareAd() {
     if (_ad != null || _rank != null && _rank! < 4) return;
-    _nxtAdShowTime = DateTime.now().add(const Duration(seconds: 60));
+    _nxtAdShowTime = DateTime.now().add(const Duration(seconds: 57));
     InterstitialAd.load(
         adUnitId: ID_INTERSTITIAL,
         request: const AdRequest(),
@@ -257,7 +260,7 @@ class _GameState extends State<Game> {
 
   void _showAd() {
     appLog(_TAG, 'show ad');
-    if (_nxtAdShowTime?.isBefore(DateTime.now()) ?? true) {
+    if ((_rank ?? 4) > 3 && (_nxtAdShowTime?.isBefore(DateTime.now()) ?? true)) {
       _ad?.fullScreenContentCallback = FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
         _ad = null;

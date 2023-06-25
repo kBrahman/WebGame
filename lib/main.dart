@@ -5,7 +5,6 @@ import 'package:web_game/widget/main_widget.dart';
 
 void main() async {
   runApp(const FlappyBall());
-  Firebase.initializeApp();
 }
 
 class FlappyBall extends StatelessWidget {

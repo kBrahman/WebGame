@@ -49,12 +49,10 @@ class MainBloc extends BaseBloc<UIState, UIState> {
       ..setString(COUNTRY, country);
   }
 
-  String _getFlag(String c) {
-    return COUNTRY_TO_FLAG.entries
-        .firstWhere((e) => c.toLowerCase() == e.key,
-            orElse: () => MapEntry('', COUNTRY_TO_FLAG.values.elementAt(Random().nextInt(COUNTRY_TO_FLAG.length))))
-        .value;
-  }
+  String _getFlag(String c) => COUNTRY_TO_FLAG.entries
+      .firstWhere((e) => c.toLowerCase() == e.key,
+          orElse: () => MapEntry('', COUNTRY_TO_FLAG.values.elementAt(Random().nextInt(COUNTRY_TO_FLAG.length))))
+      .value;
 }
 
 enum UIState { LOADING, GAME }
