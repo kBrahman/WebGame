@@ -245,7 +245,7 @@ class _GameState extends State<Game> {
 
   void _prepareAd() {
     if (_ad != null || _rank != null && _rank! < 4) return;
-    _nxtAdShowTime = DateTime.now().add(const Duration(seconds: 57));
+    _nxtAdShowTime = DateTime.now().add(const Duration(seconds: 55));
     InterstitialAd.load(
         adUnitId: ID_INTERSTITIAL,
         request: const AdRequest(),
